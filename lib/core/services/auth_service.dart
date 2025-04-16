@@ -19,8 +19,8 @@ class AuthService extends GetxService {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       token = data['token'];
-      userId = data['user']['id'];
-      userName = data['user']['name'];
+      userId = data['user']['_id'];
+      userName = data['user']['username'];
       return true;
     } else {
       return false;

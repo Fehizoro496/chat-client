@@ -102,6 +102,8 @@ class HomeView extends StatelessWidget {
                 title: Text(title),
                 subtitle: Text(subtitle),
                 onTap: () {
+                  Get.toNamed('/discussion',
+                      arguments: {'discussion': discussion});
                   // Get.to(() => ChatPage(
                   //       roomId: discussion.id,
                   //       receiverId: discussion.isGroupChat ? '' : otherUserId,

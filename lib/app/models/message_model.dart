@@ -1,3 +1,6 @@
+import 'package:chat_app/core/services/auth_service.dart';
+import 'package:get/get.dart';
+
 class Message {
   final String id;
   final String chatRoomId;
@@ -7,6 +10,7 @@ class Message {
   final bool isSeen;
   final String createdAt;
   final String updatedAt;
+  final AuthService authService = Get.find<AuthService>();
 
   Message({
     required this.id,
@@ -44,5 +48,13 @@ class Message {
       'messageType': messageType,
       'isSeen': isSeen,
     };
+  }
+
+  bool isMine() {
+    return senderId == authService.userId;
+  }
+
+  bool hasSameSenderWith(Message message) {
+    return message.senderId == senderId;
   }
 }

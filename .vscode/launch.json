@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "chat_app",
+            "name": "chat_app (debug on chrome)",
             "request": "launch",
             "type": "dart",
             "deviceId": "chrome",
@@ -14,10 +14,19 @@
             ]
         },
         {
-            "name": "chat_app",
+            "name": "chat_app (debug on windows)",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "deviceId": "windows",
+            // "args": [
+            //     "--web-renderer=html"
+            // ]
         },
+        // {
+        //     "name": "chat_app",
+        //     "request": "launch",
+        //     "type": "dart"
+        // },
         {
             "name": "chat_app (profile mode)",
             "request": "launch",
