@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:chat_app/app/models/discussion_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:chat_app/core/services/auth_service.dart';
+import 'package:chat_app/core/services/socket_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:chat_app/app/models/message_model.dart';
@@ -11,6 +12,7 @@ class DiscussionController extends GetxController {
   //TODO: Implement DiscussionController
   Discussion discussion = Get.arguments['discussion'];
   final AuthService authService = Get.find<AuthService>();
+  final SocketService socketService = Get.find<SocketService>();
   List<Message> messages = [];
   TextEditingController inputController = TextEditingController();
   bool isLoading = false;
@@ -19,6 +21,13 @@ class DiscussionController extends GetxController {
   void onInit() {
     super.onInit();
     fetchMessages();
+    socketService.onMessageReceived = handleIncomingMessage;
+  }
+
+  void handleIncomingMessage(Map<String, dynamic> data) {
+    final msg = Message.fromJson(data);
+    messages.add(msg);
+    update(); // Trigger UI refresh
   }
 
   String getName() {
@@ -53,5 +62,17 @@ class DiscussionController extends GetxController {
     update();
 
     isLoading = false;
+  }
+
+  void sendMessage() {
+    socketService.sendMessage({
+      'chatRoomId': discussion.id,
+      'senderId': authService.userId,
+      'message': inputController.text,
+      'messageType': 'text'
+    });
+    print('send :${inputController.text}');
+    inputController.clear();
+    update();
   }
 }

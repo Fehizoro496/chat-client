@@ -65,6 +65,8 @@ import 'package:get/get.dart';
 // import 'chat_page.dart';
 
 class HomeView extends StatelessWidget {
+  const HomeView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,14 +94,17 @@ class HomeView extends StatelessWidget {
 
               final title = discussion.isGroupChat
                   ? discussion.name ?? 'Unnamed Group'
-                  : 'Chat with $otherUserId';
+                  : otherUserId;
 
               final subtitle = discussion.lastMessage != null
                   ? discussion.lastMessage!.message
                   : 'No messages yet';
 
               return ListTile(
-                title: Text(title),
+                title: Text(
+                  title,
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
                 subtitle: Text(subtitle),
                 onTap: () {
                   Get.toNamed('/discussion',

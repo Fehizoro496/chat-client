@@ -1,59 +1,60 @@
+import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-typedef OnMessageReceived = void Function(Map<String, dynamic> data);
-
-class SocketService {
+class SocketService extends GetxService {
   late IO.Socket _socket;
-  bool _connected = false;
 
-  final String userId;
+  Function(Map<String, dynamic> messageData)? onMessageReceived;
 
-  SocketService({required this.userId});
-
-  void connect() {
-    _socket = IO.io('http://<your-ip>:3000', {
-      'transports': ['websocket'],
-      'autoConnect': false,
-    });
-
-    _socket.connect();
+  Future<SocketService> init() async {
+    _socket = IO.io(
+      'http://localhost:5000',
+      IO.OptionBuilder()
+          .setTransports(['websocket'])
+          .disableAutoConnect()
+          .build(),
+    );
 
     _socket.onConnect((_) {
-      _connected = true;
-      print('🟢 Socket connected');
+      print('✅ Socket connected');
     });
 
     _socket.onDisconnect((_) {
-      _connected = false;
-      print('🔴 Socket disconnected');
+      print('🔌 Socket disconnected');
     });
+
+    _socket.on('receive_message', (data) {
+      print('📩 Message received: $data');
+      if (onMessageReceived != null) {
+        onMessageReceived!(Map<String, dynamic>.from(data));
+      }
+    });
+
+    _socket.connect();
+    return this;
   }
 
   void joinRoom(String roomId) {
-    if (_connected) {
-      _socket.emit('join_room', roomId);
-    }
+    print('👥 Joining room: $roomId');
+    _socket.emit('join_room', roomId);
   }
 
-  void sendMessage({
-    required String roomId,
-    required String message,
-    required String messageType,
-  }) {
-    _socket.emit('send_message', {
-      'chatRoomId': roomId,
-      'senderId': userId,
-      'message': message,
-      'messageType': messageType,
-    });
+  void leaveRoom(String roomId) {
+    print('🚪 Leaving room: $roomId');
+    _socket.emit('leave_room',
+        roomId); // Optional: You can implement this backend-side too
   }
 
-  void listenToMessages(OnMessageReceived callback) {
-    _socket.on('receive_message',
-        (dynamic data) => callback(Map<String, dynamic>.from(data)));
+  void sendMessage(Map<String, dynamic> messageData) {
+    print('📤 Sending message: $messageData');
+    _socket.emit('send_message', messageData);
   }
 
   void disconnect() {
     _socket.disconnect();
+  }
+
+  void reconnect() {
+    _socket.connect();
   }
 }

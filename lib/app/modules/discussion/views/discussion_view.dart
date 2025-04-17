@@ -17,7 +17,7 @@ class DiscussionView extends GetView<DiscussionController> {
             IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
           ],
           surfaceTintColor: Colors.transparent,
-          title: Text('${controller.getName()}'),
+          title: Text(controller.getName()),
           centerTitle: true,
         ),
         body: Column(
@@ -83,7 +83,7 @@ class DiscussionView extends GetView<DiscussionController> {
                   )),
                   IconButton(
                       onPressed: () {
-                        // controller.sendMessage();
+                        controller.sendMessage();
                       },
                       icon: const Icon(
                         Icons.send,

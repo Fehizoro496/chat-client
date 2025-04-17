@@ -1,14 +1,16 @@
 import 'dart:convert';
 import 'package:chat_app/core/services/auth_service.dart';
+import 'package:chat_app/core/services/socket_service.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../../../models/discussion_model.dart';
 
 class HomeController extends GetxController {
   final AuthService authService = Get.find<AuthService>();
+  final SocketService socketService = Get.find<SocketService>();
   List<Discussion> discussions = [];
   bool isLoading = false;
-  @override
+
   @override
   void onInit() {
     super.onInit();
@@ -34,7 +36,8 @@ class HomeController extends GetxController {
       discussions = data.map((e) {
         return Discussion.fromJson(e);
       }).toList();
-      print(discussions.map((e) => e.lastMessage!.message));
+      // print(discussions.map((e) => e.lastMessage!.message));
+      discussions.forEach((e) => socketService.joinRoom(e.id));
       update();
     }
 

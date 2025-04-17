@@ -16,7 +16,7 @@ class LoginView extends GetView<LoginController> {
         centerTitle: true,
       ),
       body: GetBuilder<LoginController>(
-        builder: (ctrl) => Padding(
+        builder: (controller) => Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
@@ -31,16 +31,17 @@ class LoginView extends GetView<LoginController> {
                 decoration: const InputDecoration(labelText: 'Password'),
               ),
               const SizedBox(height: 24),
-              ctrl.isLoading
+              controller.isLoading
                   ? const CircularProgressIndicator()
                   : ElevatedButton(
                       onPressed: () async {
-                        final success = await ctrl.login(
+                        final success = await controller.login(
                           controller.emailCtrl.text.trim(),
                           controller.passwordCtrl.text.trim(),
                         );
                         if (success) {
                           Get.offAllNamed('/home');
+                          controller.initSocket();
                         } else {
                           Get.snackbar(
                             "Login Failed",
