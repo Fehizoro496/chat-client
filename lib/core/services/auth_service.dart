@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,11 +10,11 @@ class AuthService extends GetxService {
 
   Future<AuthService> init() async => this;
 
-  Future<bool> login(String email, String password) async {
+  Future<bool> login(String username, String password) async {
     final response = await http.post(
       Uri.parse('http://localhost:5000/api/auth/login'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': email, 'password': password}),
+      body: jsonEncode({'username': username, 'password': password}),
     );
 
     if (response.statusCode == 200) {
@@ -22,7 +23,29 @@ class AuthService extends GetxService {
       userId = data['user']['_id'];
       userName = data['user']['username'];
       return true;
+    } else if (response.statusCode == 404) {
+      Get.snackbar(
+        "Login Failed",
+        "User not found",
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+      return false;
+    } else if (response.statusCode == 400) {
+      Get.snackbar(
+        "Login Failed",
+        "Wrong password",
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+      return false;
     } else {
+      Get.snackbar(
+        "Login Failed",
+        "Something went wrong",
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
       return false;
     }
   }

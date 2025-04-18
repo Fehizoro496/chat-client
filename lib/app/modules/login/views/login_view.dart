@@ -21,8 +21,8 @@ class LoginView extends GetView<LoginController> {
           child: Column(
             children: [
               TextField(
-                controller: controller.emailCtrl,
-                decoration: const InputDecoration(labelText: 'Email'),
+                controller: controller.usernameCtrl,
+                decoration: const InputDecoration(labelText: 'Username'),
               ),
               const SizedBox(height: 12),
               TextField(
@@ -36,19 +36,12 @@ class LoginView extends GetView<LoginController> {
                   : ElevatedButton(
                       onPressed: () async {
                         final success = await controller.login(
-                          controller.emailCtrl.text.trim(),
+                          controller.usernameCtrl.text.trim(),
                           controller.passwordCtrl.text.trim(),
                         );
                         if (success) {
                           Get.offAllNamed('/home');
                           controller.initSocket();
-                        } else {
-                          Get.snackbar(
-                            "Login Failed",
-                            "Incorrect email or password",
-                            backgroundColor: Colors.redAccent,
-                            colorText: Colors.white,
-                          );
                         }
                       },
                       child: const Text('Login'),

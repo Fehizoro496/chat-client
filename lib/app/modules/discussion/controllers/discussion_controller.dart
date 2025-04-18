@@ -24,9 +24,9 @@ class DiscussionController extends GetxController {
     socketService.onMessageReceived = handleIncomingMessage;
   }
 
-  void handleIncomingMessage(Map<String, dynamic> data) {
-    final msg = Message.fromJson(data);
-    messages.add(msg);
+  void handleIncomingMessage(Message data) {
+    // final msg = Message.fromJson(data);
+    messages.add(data);
     update(); // Trigger UI refresh
   }
 

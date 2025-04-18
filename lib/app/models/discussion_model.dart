@@ -5,9 +5,9 @@ class Discussion {
   final List<String> participantIds; // list of user IDs
   final bool isGroupChat;
   final String? name;
-  final Message? lastMessage;
+  Message? lastMessage;
   final String createdAt;
-  final String updatedAt;
+  String updatedAt;
 
   Discussion({
     required this.id,

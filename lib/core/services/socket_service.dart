@@ -1,11 +1,13 @@
+import 'package:chat_app/app/models/message_model.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService extends GetxService {
   late IO.Socket _socket;
 
-  Function(Map<String, dynamic> messageData)? onMessageReceived;
-
+  // Function(Map<String, dynamic> messageData)? onMessageReceived;
+  Function(Message messageData)? onMessageReceived;
+  Function(Message messageData)? onDiscussionMessage;
   Future<SocketService> init() async {
     _socket = IO.io(
       'http://localhost:5000',
@@ -25,9 +27,12 @@ class SocketService extends GetxService {
 
     _socket.on('receive_message', (data) {
       print('📩 Message received: $data');
-      if (onMessageReceived != null) {
-        onMessageReceived!(Map<String, dynamic>.from(data));
-      }
+
+      // Notify messages (if in MessagesController)
+      onMessageReceived?.call(Message.fromJson(data));
+
+      // Notify discussions
+      onDiscussionMessage?.call(Message.fromJson(data));
     });
 
     _socket.connect();

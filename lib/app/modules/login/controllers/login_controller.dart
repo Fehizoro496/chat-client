@@ -5,15 +5,15 @@ import 'package:get/get.dart';
 
 class LoginController extends GetxController {
   final AuthService authService = Get.find<AuthService>();
-  TextEditingController emailCtrl = TextEditingController();
+  TextEditingController usernameCtrl = TextEditingController();
   TextEditingController passwordCtrl = TextEditingController();
   bool isLoading = false;
 
-  Future<bool> login(String email, String password) async {
+  Future<bool> login(String username, String password) async {
     isLoading = true;
     update();
 
-    final success = await authService.login(email, password);
+    final success = await authService.login(username, password);
 
     isLoading = false;
     update();

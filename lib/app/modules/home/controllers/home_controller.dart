@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:chat_app/app/models/message_model.dart';
 import 'package:chat_app/core/services/auth_service.dart';
 import 'package:chat_app/core/services/socket_service.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,7 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     fetchDiscussions();
+    socketService.onDiscussionMessage = handleNewMessage;
   }
 
   Future<void> fetchDiscussions() async {
@@ -42,5 +44,19 @@ class HomeController extends GetxController {
     }
 
     isLoading = false;
+  }
+
+  handleNewMessage(Message messageData) {
+    final chatRoomId = messageData.chatRoomId;
+    final content = messageData.message;
+
+    // Find the discussion and update lastMessage
+    final index = discussions.indexWhere((d) => d.id == chatRoomId);
+    if (index != -1) {
+      discussions[index].lastMessage = messageData;
+      // Optionally sort the list by updatedAt
+    }
+
+    update();
   }
 }
