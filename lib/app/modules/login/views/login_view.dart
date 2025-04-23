@@ -43,6 +43,7 @@ class LoginView extends GetView<LoginController> {
               controller.isLoading
                   ? const CircularProgressIndicator()
                   : ElevatedButton(
+                      autofocus: true,
                       onPressed: () async {
                         final success = await controller.login(
                           controller.usernameCtrl.text.trim(),

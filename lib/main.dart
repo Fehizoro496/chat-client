@@ -15,7 +15,7 @@ void main() async {
 
     WindowOptions windowOptions = const WindowOptions(
       size: Size(375, 667), // Phone-like size
-      center: true,
+      // center: true,
       minimumSize: Size(375, 667), // Lock minimum size
       maximumSize: Size(375, 667), // Lock maximum size
     );
@@ -34,6 +34,7 @@ void main() async {
       getPages: AppPages.routes,
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          primaryColor: Colors.blue,
           useMaterial3: true),
     ),
   );

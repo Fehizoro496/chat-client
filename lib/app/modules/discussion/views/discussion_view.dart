@@ -1,5 +1,5 @@
-// import 'package:chat_app/app/models/discussion_model.dart';
-// import 'package:chat_app/app/models/message_model.dart';
+import 'package:chat_app/app/modules/discussion/views/widget/my_message.dart';
+import 'package:chat_app/app/modules/discussion/views/widget/other_message.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -27,13 +27,6 @@ class DiscussionView extends GetView<DiscussionController> {
                   Expanded(
                     child: ListView.builder(
                       itemCount: controller.messages.length,
-                      // itemBuilder: (context, index) => ListTile(
-                      //   tileColor: (controller.discussion.messages[index].auteur == 'me')
-                      //       ? Colors.blue[50]
-                      //       : Colors.white,
-                      //   title: Text(controller.discussion.messages[index].auteur),
-                      //   subtitle: Text(controller.discussion.messages[index].texte),
-                      // ),
                       itemBuilder: (context, index) => Container(
                         padding: (index > 0 &&
                                 controller.messages[index].hasSameSenderWith(
@@ -45,17 +38,10 @@ class DiscussionView extends GetView<DiscussionController> {
                           alignment: (controller.messages[index].isMine())
                               ? Alignment.topRight
                               : Alignment.topLeft,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 14, vertical: 8),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: (controller.messages[index].isMine())
-                                  ? Colors.blue[200]
-                                  : Colors.grey.shade200,
-                            ),
-                            child: Text(controller.messages[index].message),
-                          ),
+                          child: (controller.messages[index].isMine())
+                              ? MyMessage(message: controller.messages[index])
+                              : OtherMessage(
+                                  message: controller.messages[index]),
                         ),
                       ),
                     ),
@@ -78,12 +64,22 @@ class DiscussionView extends GetView<DiscussionController> {
                               size: 18.0,
                             )),
                         Expanded(
-                            child: TextField(
-                          controller: controller.inputController,
-                          decoration: const InputDecoration(
-                              hintText: 'Write message ...',
-                              border: InputBorder.none),
-                        )),
+                          child: TextField(
+                            controller: controller.inputController,
+                            minLines: 1,
+                            maxLines: 2,
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 8),
+                              hintText: 'Aa',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                borderSide: BorderSide.none,
+                              ),
+                              filled: true,
+                            ),
+                          ),
+                        ),
                         IconButton(
                             onPressed: () {
                               controller.sendMessage();
@@ -101,25 +97,3 @@ class DiscussionView extends GetView<DiscussionController> {
     });
   }
 }
-
-// class DiscussionView extends GetView<DiscussionController> {
-//   const DiscussionView({Key? key}) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     return GetBuilder<DiscussionController>(builder: (context) {
-//       return Scaffold(
-//           appBar: AppBar(
-//             actions: [
-//               IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
-//             ],
-//             surfaceTintColor: Colors.transparent,
-//             title: Text('${controller.getName()}'),
-//             // title: Text('controller.discussion.contact'),
-//             centerTitle: true,
-//           ),
-//           body: Center(
-//             child: Text(('data')),
-//           ));
-//     });
-//   }
-// }

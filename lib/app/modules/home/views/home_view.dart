@@ -43,10 +43,10 @@ class HomeView extends StatelessWidget {
 
               return ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: Theme.of(context).primaryColor,
                   child: Icon(
-                      (discussion.isGroupChat) ? Icons.group : Icons.person,
-                      color: Colors.black54),
+                      (discussion.isGroupChat) ? Icons.groups : Icons.person,
+                      color: Theme.of(context).colorScheme.onPrimary),
                 ),
                 title: Text(
                   title,
