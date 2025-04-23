@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:chat_app/app/models/discussion_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:chat_app/core/services/auth_service.dart';
@@ -7,6 +6,7 @@ import 'package:chat_app/core/services/socket_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:chat_app/app/models/message_model.dart';
+import 'package:chat_app/app/constant.dart';
 
 class DiscussionController extends GetxController {
   //TODO: Implement DiscussionController
@@ -15,13 +15,15 @@ class DiscussionController extends GetxController {
   final SocketService socketService = Get.find<SocketService>();
   List<Message> messages = [];
   TextEditingController inputController = TextEditingController();
-  bool isLoading = false;
+  bool isLoading = true;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    fetchMessages();
+    await fetchMessages();
     socketService.onMessageReceived = handleIncomingMessage;
+    isLoading = false;
+    update();
   }
 
   void handleIncomingMessage(Message data) {
@@ -30,26 +32,11 @@ class DiscussionController extends GetxController {
     update(); // Trigger UI refresh
   }
 
-  String getName() {
-    if (discussion.isGroupChat) {
-      return discussion.name ?? 'still unnamed';
-    }
-    String temp = discussion.participantIds
-        .where((element) => element != authService.userId)
-        .first;
-    return temp;
-  }
-
   Future<void> fetchMessages() async {
-    isLoading = true;
-    update();
-
-    final token = authService.token;
-
     final response = await http.get(
-      Uri.parse("http://localhost:5000/api/chats/messages/${discussion.id}"),
+      Uri.parse("http://$LOCAL_URL:5000/api/chats/messages/${discussion.id}"),
       headers: {
-        'Authorization': 'Bearer $token',
+        'Authorization': 'Bearer ${authService.token}',
       },
     );
 
@@ -59,9 +46,6 @@ class DiscussionController extends GetxController {
         return Message.fromJson(e);
       }).toList();
     }
-    update();
-
-    isLoading = false;
   }
 
   void sendMessage() {

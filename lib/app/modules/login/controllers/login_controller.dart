@@ -8,6 +8,12 @@ class LoginController extends GetxController {
   TextEditingController usernameCtrl = TextEditingController();
   TextEditingController passwordCtrl = TextEditingController();
   bool isLoading = false;
+  bool hidePassword = true;
+
+  void tooglePwdVisibility() {
+    hidePassword = !hidePassword;
+    update();
+  }
 
   Future<bool> login(String username, String password) async {
     isLoading = true;

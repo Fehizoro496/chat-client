@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:chat_app/app/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -12,7 +13,7 @@ class AuthService extends GetxService {
 
   Future<bool> login(String username, String password) async {
     final response = await http.post(
-      Uri.parse('http://localhost:5000/api/auth/login'),
+      Uri.parse('http://$LOCAL_URL:5000/api/auth/login'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'username': username, 'password': password}),
     );

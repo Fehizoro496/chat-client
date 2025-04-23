@@ -1,4 +1,5 @@
 import 'package:chat_app/app/models/message_model.dart';
+import 'package:chat_app/app/constant.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -10,7 +11,7 @@ class SocketService extends GetxService {
   Function(Message messageData)? onDiscussionMessage;
   Future<SocketService> init() async {
     _socket = IO.io(
-      'http://localhost:5000',
+      'http://${LOCAL_URL}:5000',
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .disableAutoConnect()

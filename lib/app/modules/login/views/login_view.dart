@@ -27,8 +27,17 @@ class LoginView extends GetView<LoginController> {
               const SizedBox(height: 12),
               TextField(
                 controller: controller.passwordCtrl,
-                obscureText: true,
-                decoration: const InputDecoration(labelText: 'Password'),
+                obscureText: controller.hidePassword,
+                decoration: InputDecoration(
+                    labelText: 'Password',
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                          controller.hidePassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          size: 20.0),
+                      onPressed: () => controller.tooglePwdVisibility(),
+                    )),
               ),
               const SizedBox(height: 24),
               controller.isLoading

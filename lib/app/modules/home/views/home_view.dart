@@ -23,19 +23,23 @@ class HomeView extends StatelessWidget {
             itemCount: controller.discussions.length,
             itemBuilder: (context, index) {
               final discussion = controller.discussions[index];
-              final currentUserId = controller.authService.userId;
+              // final currentUserId = controller.authService.userId;
 
               // Determine the other participant (if private chat)
-              final otherUserId = discussion.participantIds.firstWhere(
-                  (id) => id != currentUserId,
-                  orElse: () => 'Unknown');
+              // final otherUserId = discussion.participantIds.firstWhere(
+              //     (id) => id != currentUserId,
+              //     orElse: () => 'Unknown');
 
-              final title = discussion.isGroupChat
-                  ? discussion.name ?? 'Unnamed Group'
-                  : otherUserId;
+              final title = discussion.name ?? 'Unnamed Group';
 
-              final subtitle =
-                  discussion.lastMessage?.message ?? 'No messages yet';
+              String subtitle = (!discussion.lastMessage.isNull)
+                  ? (discussion.lastMessage!.isMine())
+                      ? 'you : '
+                      : ''
+                  : '';
+
+              subtitle = subtitle +
+                  (discussion.lastMessage?.message ?? 'No messages yet');
 
               return ListTile(
                 leading: CircleAvatar(
@@ -46,7 +50,7 @@ class HomeView extends StatelessWidget {
                 ),
                 title: Text(
                   title,
-                  style: TextStyle(fontWeight: FontWeight.w600),
+                  style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
                 subtitle: Text(subtitle),
                 onTap: () {

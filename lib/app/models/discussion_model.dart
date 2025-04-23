@@ -4,7 +4,7 @@ class Discussion {
   final String id;
   final List<String> participantIds; // list of user IDs
   final bool isGroupChat;
-  final String? name;
+  String? name;
   Message? lastMessage;
   final String createdAt;
   String updatedAt;
