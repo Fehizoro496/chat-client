@@ -7,8 +7,8 @@ class SocketService extends GetxService {
   late IO.Socket _socket;
 
   // Function(Map<String, dynamic> messageData)? onMessageReceived;
-  Function(Message messageData)? onMessageReceived;
-  Function(Message messageData)? onDiscussionMessage;
+  Function(MessageModel messageData)? onMessageReceived;
+  Function(MessageModel messageData)? onDiscussionMessage;
   Future<SocketService> init() async {
     _socket = IO.io(
       'http://${LOCAL_URL}:5000',
@@ -30,10 +30,10 @@ class SocketService extends GetxService {
       print('📩 Message received: $data');
 
       // Notify messages (if in MessagesController)
-      onMessageReceived?.call(Message.fromJson(data));
+      onMessageReceived?.call(MessageModel.fromJson(data));
 
       // Notify discussions
-      onDiscussionMessage?.call(Message.fromJson(data));
+      onDiscussionMessage?.call(MessageModel.fromJson(data));
     });
 
     _socket.connect();

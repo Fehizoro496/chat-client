@@ -5,7 +5,7 @@ class Discussion {
   final List<String> participantIds; // list of user IDs
   final bool isGroupChat;
   String? name;
-  Message? lastMessage;
+  MessageModel? lastMessage;
   final String createdAt;
   String updatedAt;
 
@@ -29,7 +29,7 @@ class Discussion {
       isGroupChat: json['isGroupChat'] ?? false,
       name: json['name'],
       lastMessage: json['lastMessage'] != null
-          ? Message.fromJson(json['lastMessage'])
+          ? MessageModel.fromJson(json['lastMessage'])
           : null,
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],

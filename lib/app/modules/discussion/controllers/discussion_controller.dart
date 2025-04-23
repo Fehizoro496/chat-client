@@ -13,7 +13,7 @@ class DiscussionController extends GetxController {
   Discussion discussion = Get.arguments['discussion'];
   final AuthService authService = Get.find<AuthService>();
   final SocketService socketService = Get.find<SocketService>();
-  List<Message> messages = [];
+  List<MessageModel> messages = [];
   TextEditingController inputController = TextEditingController();
   bool isLoading = true;
 
@@ -26,8 +26,7 @@ class DiscussionController extends GetxController {
     update();
   }
 
-  void handleIncomingMessage(Message data) {
-    // final msg = Message.fromJson(data);
+  void handleIncomingMessage(MessageModel data) {
     messages.add(data);
     update(); // Trigger UI refresh
   }
@@ -43,7 +42,7 @@ class DiscussionController extends GetxController {
     if (response.statusCode == 200) {
       final List data = jsonDecode(response.body);
       messages = data.map((e) {
-        return Message.fromJson(e);
+        return MessageModel.fromJson(e);
       }).toList();
     }
   }

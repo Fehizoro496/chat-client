@@ -3,7 +3,7 @@ import 'package:chat_app/app/models/message_model.dart';
 import 'package:flutter/material.dart';
 
 class MyMessage extends StatelessWidget {
-  final Message message;
+  final MessageModel message;
 
   const MyMessage({super.key, required this.message});
 

@@ -1,7 +1,7 @@
 import 'package:chat_app/core/services/auth_service.dart';
 import 'package:get/get.dart';
 
-class Message {
+class MessageModel {
   final String id;
   final String chatRoomId;
   final String senderId;
@@ -12,7 +12,7 @@ class Message {
   final String updatedAt;
   final AuthService authService = Get.find<AuthService>();
 
-  Message({
+  MessageModel({
     required this.id,
     required this.chatRoomId,
     required this.senderId,
@@ -23,8 +23,8 @@ class Message {
     required this.updatedAt,
   });
 
-  factory Message.fromJson(Map<String, dynamic> json) {
-    return Message(
+  factory MessageModel.fromJson(Map<String, dynamic> json) {
+    return MessageModel(
       id: json['_id'],
       chatRoomId: json['chatRoomId'] is String
           ? json['chatRoomId']
@@ -54,7 +54,7 @@ class Message {
     return senderId == authService.userId;
   }
 
-  bool hasSameSenderWith(Message message) {
+  bool hasSameSenderWith(MessageModel message) {
     return message.senderId == senderId;
   }
 }

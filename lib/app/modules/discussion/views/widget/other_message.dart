@@ -3,7 +3,7 @@ import 'package:chat_app/app/utils/hour_format.dart';
 import 'package:flutter/material.dart';
 
 class OtherMessage extends StatelessWidget {
-  final Message message;
+  final MessageModel message;
 
   const OtherMessage({super.key, required this.message});
 

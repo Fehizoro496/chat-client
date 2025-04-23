@@ -75,7 +75,7 @@ class HomeController extends GetxController {
     isLoading = false;
   }
 
-  handleNewMessage(Message messageData) {
+  handleNewMessage(MessageModel messageData) {
     final chatRoomId = messageData.chatRoomId;
     // final content = messageData.message;
 
