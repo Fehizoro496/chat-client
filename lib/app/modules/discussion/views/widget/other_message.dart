@@ -1,4 +1,5 @@
 import 'package:chat_app/app/models/message_model.dart';
+import 'package:chat_app/app/utils/hour_format.dart';
 import 'package:flutter/material.dart';
 
 class OtherMessage extends StatelessWidget {
@@ -28,7 +29,7 @@ class OtherMessage extends StatelessWidget {
           width: 6.0,
         ),
         Text(
-          message.updatedAt.substring(11, 16),
+          formatGMTplus3(message.updatedAt),
           style: const TextStyle(fontSize: 11.0, color: Colors.black38),
         ),
       ],

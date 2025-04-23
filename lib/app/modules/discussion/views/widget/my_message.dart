@@ -1,3 +1,4 @@
+import 'package:chat_app/app/utils/hour_format.dart';
 import 'package:chat_app/app/models/message_model.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class MyMessage extends StatelessWidget {
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         Text(
-          message.updatedAt.substring(11, 16),
+          formatGMTplus3(message.updatedAt),
           style: const TextStyle(fontSize: 11.0, color: Colors.black38),
         ),
         const SizedBox(
