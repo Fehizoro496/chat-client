@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:chat_app/app/models/discussion_model.dart';
+import 'package:chat_app/core/services/notification_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:chat_app/core/services/auth_service.dart';
 import 'package:chat_app/core/services/socket_service.dart';
@@ -13,9 +14,12 @@ class DiscussionController extends GetxController {
   Discussion discussion = Get.arguments['discussion'];
   final AuthService authService = Get.find<AuthService>();
   final SocketService socketService = Get.find<SocketService>();
+  final NotificationService notificationService =
+      Get.find<NotificationService>();
   List<MessageModel> messages = [];
   TextEditingController inputController = TextEditingController();
   bool isLoading = true;
+  bool moreActions = false;
 
   @override
   void onInit() async {
@@ -23,6 +27,11 @@ class DiscussionController extends GetxController {
     await fetchMessages();
     socketService.onMessageReceived = handleIncomingMessage;
     isLoading = false;
+    update();
+  }
+
+  void toogleMoreActions() {
+    moreActions = !moreActions;
     update();
   }
 
@@ -48,14 +57,23 @@ class DiscussionController extends GetxController {
   }
 
   void sendMessage() {
-    socketService.sendMessage({
-      'chatRoomId': discussion.id,
-      'senderId': authService.userId,
-      'message': inputController.text,
-      'messageType': 'text'
-    });
-    print('send :${inputController.text}');
-    inputController.clear();
-    update();
+    if (inputController.text.trim().isNotEmpty) {
+      socketService.sendMessage({
+        'chatRoomId': discussion.id,
+        'senderId': authService.userId,
+        'message': inputController.text,
+        'messageType': 'text'
+      });
+      print('send :${inputController.text}');
+      inputController.clear();
+      update();
+    }
+  }
+
+  void showNotification() {
+    notificationService.showNotification(
+      title: "test title",
+      body: 'test body',
+    );
   }
 }

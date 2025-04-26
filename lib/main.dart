@@ -1,3 +1,4 @@
+import 'package:chat_app/core/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:window_manager/window_manager.dart'; // Add this import
@@ -26,6 +27,7 @@ void main() async {
   }
 
   await Get.putAsync(() => AuthService().init());
+  await Get.putAsync(() => NotificationService().init());
   runApp(
     GetMaterialApp(
       title: "Application",

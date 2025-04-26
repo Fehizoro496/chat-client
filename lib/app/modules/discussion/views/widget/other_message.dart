@@ -16,12 +16,12 @@ class OtherMessage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: Colors.grey.shade200,
+            color: Colors.grey[100], // Updated to match login_view.dart
           ),
           child: Text(
             message.message,
             style: const TextStyle(
-              color: Colors.black,
+              color: Colors.black87, // Updated to match login_view.dart
             ),
           ),
         ),
@@ -30,7 +30,8 @@ class OtherMessage extends StatelessWidget {
         ),
         Text(
           formatGMTplus3(message.updatedAt),
-          style: const TextStyle(fontSize: 11.0, color: Colors.black38),
+          style:
+              const TextStyle(fontSize: 11.0, color: Colors.black54), // Updated
         ),
       ],
     );

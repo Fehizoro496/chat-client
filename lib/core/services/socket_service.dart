@@ -1,12 +1,14 @@
 import 'package:chat_app/app/models/message_model.dart';
 import 'package:chat_app/app/constant.dart';
+import 'package:chat_app/core/services/notification_service.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService extends GetxService {
   late IO.Socket _socket;
+  late NotificationService notificationService =
+      Get.find<NotificationService>();
 
-  // Function(Map<String, dynamic> messageData)? onMessageReceived;
   Function(MessageModel messageData)? onMessageReceived;
   Function(MessageModel messageData)? onDiscussionMessage;
   Future<SocketService> init() async {
@@ -34,6 +36,12 @@ class SocketService extends GetxService {
 
       // Notify discussions
       onDiscussionMessage?.call(MessageModel.fromJson(data));
+
+      //show notification
+      notificationService.showNotification(
+        title: "test title",
+        body: 'test body',
+      );
     });
 
     _socket.connect();

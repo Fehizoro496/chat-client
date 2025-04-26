@@ -11,52 +11,105 @@ class LoginView extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('LoginView'),
-        centerTitle: true,
-      ),
+      backgroundColor: Colors.white,
       body: GetBuilder<LoginController>(
-        builder: (controller) => Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              TextField(
-                controller: controller.usernameCtrl,
-                decoration: const InputDecoration(labelText: 'Username'),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: controller.passwordCtrl,
-                obscureText: controller.hidePassword,
-                decoration: InputDecoration(
-                    labelText: 'Password',
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                          controller.hidePassword
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                          size: 20.0),
-                      onPressed: () => controller.tooglePwdVisibility(),
-                    )),
-              ),
-              const SizedBox(height: 24),
-              controller.isLoading
-                  ? const CircularProgressIndicator()
-                  : ElevatedButton(
-                      autofocus: true,
-                      onPressed: () async {
-                        final success = await controller.login(
-                          controller.usernameCtrl.text.trim(),
-                          controller.passwordCtrl.text.trim(),
-                        );
-                        if (success) {
-                          Get.offAllNamed('/home');
-                          controller.initSocket();
-                        }
-                      },
-                      child: const Text('Login'),
+        builder: (controller) => SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.person_outline,
+                        size: 60, color: Colors.black87),
+                    const SizedBox(height: 32),
+                    const Text(
+                      'Welcome',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w300,
+                        letterSpacing: 1.5,
+                      ),
                     ),
-            ],
+                    const SizedBox(height: 48),
+                    TextField(
+                      controller: controller.usernameCtrl,
+                      decoration: InputDecoration(
+                        labelText: 'Username',
+                        prefixIcon:
+                            const Icon(Icons.person, color: Colors.black54),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide.none,
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[100],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: controller.passwordCtrl,
+                      obscureText: controller.hidePassword,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        prefixIcon:
+                            const Icon(Icons.lock, color: Colors.black54),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide.none,
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[100],
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            controller.hidePassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.black54,
+                          ),
+                          onPressed: () => controller.tooglePwdVisibility(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: controller.isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black87,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                elevation: 0,
+                              ),
+                              onPressed: () async {
+                                final success = await controller.login(
+                                  controller.usernameCtrl.text.trim(),
+                                  controller.passwordCtrl.text.trim(),
+                                );
+                                if (success) {
+                                  Get.offAllNamed('/home');
+                                  controller.initSocket();
+                                }
+                              },
+                              child: const Text(
+                                'Sign In',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                            ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ),

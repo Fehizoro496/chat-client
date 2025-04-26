@@ -26,7 +26,7 @@
             "name": "chat_app (debug on phone)",
             "request": "launch",
             "type": "dart",
-            "deviceId": "OUKIC19Pro034210",
+            "deviceId": "6a8ddcc9",
             // "args": [
             //     "--web-renderer=html"
             // ]
