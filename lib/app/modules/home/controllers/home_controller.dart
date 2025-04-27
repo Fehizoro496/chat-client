@@ -45,6 +45,22 @@ class HomeController extends GetxController {
     return 'still unnamed';
   }
 
+  Future<String> fetchUserName(String userId) async {
+    final response = await http.get(
+      Uri.parse("http://$LOCAL_URL:5000/api/users/$userId"),
+      headers: {
+        'Authorization': 'Bearer ${authService.token}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      User user = User.fromJson(data);
+      return user.username;
+    }
+    return 'Unknown User';
+  }
+
   Future<void> fetchDiscussions() async {
     isLoading = true;
     update();

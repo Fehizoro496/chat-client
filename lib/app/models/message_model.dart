@@ -5,9 +5,9 @@ class MessageModel {
   final String id;
   final String chatRoomId;
   final String senderId;
-  final String message;
+  String message;
   final String messageType; // 'text', 'image', 'file'
-  final bool isSeen;
+  List<String> seenBy;
   final String createdAt;
   final String updatedAt;
   final AuthService authService = Get.find<AuthService>();
@@ -18,7 +18,7 @@ class MessageModel {
     required this.senderId,
     required this.message,
     required this.messageType,
-    required this.isSeen,
+    required this.seenBy,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -34,7 +34,8 @@ class MessageModel {
           : json['senderId']['_id'],
       message: json['message'],
       messageType: json['messageType'] ?? 'text',
-      isSeen: json['isSeen'] ?? false,
+      seenBy: List<String>.from(
+          json['seenBy']?.map((x) => x is String ? x : x['_id']) ?? []),
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
     );
@@ -46,7 +47,7 @@ class MessageModel {
       'senderId': senderId,
       'message': message,
       'messageType': messageType,
-      'isSeen': isSeen,
+      'seenBy': seenBy,
     };
   }
 
@@ -56,5 +57,9 @@ class MessageModel {
 
   bool hasSameSenderWith(MessageModel message) {
     return message.senderId == senderId;
+  }
+
+  bool seenByMe() {
+    return seenBy.contains(Get.find<AuthService>().userId);
   }
 }

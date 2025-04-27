@@ -1,4 +1,5 @@
 import 'package:chat_app/app/modules/home/controllers/home_controller.dart';
+import 'package:chat_app/app/utils/hour_format.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,10 +23,10 @@ class HomeView extends StatelessWidget {
           }
 
           if (controller.discussions.isEmpty) {
-            return Center(
+            return const Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
+                children: [
                   Icon(Icons.chat_bubble_outline,
                       size: 60, color: Colors.black87),
                   SizedBox(height: 16),
@@ -83,6 +84,18 @@ class HomeView extends StatelessWidget {
                     subtitle,
                     style: const TextStyle(color: Colors.black54),
                   ),
+                  trailing: (discussion.lastMessage != null)
+                      ? Text(
+                          discussion.updatedAt != null
+                              ? formatGMTplus3(
+                                  discussion.lastMessage!.createdAt)
+                              : '',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.black54,
+                          ),
+                        )
+                      : null,
                   onTap: () {
                     Get.toNamed('/discussion',
                         arguments: {'discussion': discussion});

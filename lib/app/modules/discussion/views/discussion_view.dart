@@ -8,8 +8,17 @@ import '../controllers/discussion_controller.dart';
 
 class DiscussionView extends GetView<DiscussionController> {
   const DiscussionView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    final ScrollController scrollController = ScrollController();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (scrollController.hasClients) {
+        scrollController.jumpTo(scrollController.position.maxScrollExtent);
+      }
+    });
+
     return GetBuilder<DiscussionController>(builder: (context) {
       return Scaffold(
         backgroundColor: Colors.white,
@@ -32,6 +41,7 @@ class DiscussionView extends GetView<DiscussionController> {
                 children: [
                   Expanded(
                     child: ListView.builder(
+                      controller: scrollController,
                       itemCount: controller.messages.length,
                       itemBuilder: (context, index) => Container(
                         padding: (index > 0 &&
