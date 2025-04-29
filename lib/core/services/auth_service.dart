@@ -11,6 +11,35 @@ class AuthService extends GetxService {
 
   Future<AuthService> init() async => this;
 
+  Future<bool> register(String username, String email, String password) async {
+    final response = await http.post(
+      Uri.parse('http://$LOCAL_URL:5000/api/auth/register'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(
+          {'username': username, 'email': email, 'password': password}),
+    );
+
+    if (response.statusCode == 201) {
+      return true;
+    } else if (response.statusCode == 400) {
+      Get.snackbar(
+        "Registration failed",
+        json.decode(response.body)['message'],
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+      return false;
+    } else {
+      Get.snackbar(
+        "Registration failed",
+        "Something went wrong",
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+      return false;
+    }
+  }
+
   Future<bool> login(String username, String password) async {
     final response = await http.post(
       Uri.parse('http://$LOCAL_URL:5000/api/auth/login'),

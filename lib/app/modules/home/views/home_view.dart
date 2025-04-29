@@ -86,10 +86,7 @@ class HomeView extends StatelessWidget {
                   ),
                   trailing: (discussion.lastMessage != null)
                       ? Text(
-                          discussion.updatedAt != null
-                              ? formatGMTplus3(
-                                  discussion.lastMessage!.createdAt)
-                              : '',
+                          formatGMTplus3(discussion.lastMessage!.createdAt),
                           style: const TextStyle(
                             fontSize: 12,
                             color: Colors.black54,

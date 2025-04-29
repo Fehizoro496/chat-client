@@ -26,7 +26,7 @@
             "name": "chat_app (debug on phone)",
             "request": "launch",
             "type": "dart",
-            "deviceId": "6a8ddcc9",
+            "deviceId": "DRGGAM2871904457",
             // "args": [
             //     "--web-renderer=html"
             // ]

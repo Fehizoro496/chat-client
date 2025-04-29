@@ -10,7 +10,6 @@ import 'package:chat_app/app/models/message_model.dart';
 import 'package:chat_app/app/constant.dart';
 
 class DiscussionController extends GetxController {
-  //TODO: Implement DiscussionController
   Discussion discussion = Get.arguments['discussion'];
   final AuthService authService = Get.find<AuthService>();
   final SocketService socketService = Get.find<SocketService>();
@@ -64,7 +63,7 @@ class DiscussionController extends GetxController {
         'message': inputController.text,
         'messageType': 'text'
       });
-      print('send :${inputController.text}');
+      // print('send :${inputController.text}');
       inputController.clear();
       update();
     }

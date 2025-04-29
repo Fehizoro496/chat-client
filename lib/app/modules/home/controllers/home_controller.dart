@@ -84,7 +84,9 @@ class HomeController extends GetxController {
         e.name = await fetchDiscussionName(e);
         return e;
       }));
-      discussions.forEach((e) => socketService.joinRoom(e.id));
+      for (var e in discussions) {
+        socketService.joinRoom(e.id);
+      }
       update();
     }
 
@@ -109,7 +111,7 @@ class HomeController extends GetxController {
         return DateTime.parse(b.lastMessage!.createdAt)
             .compareTo(DateTime.parse(a.lastMessage!.createdAt));
       });
-      print(discussions.map((e) => e.name));
+      // print(discussions.map((e) => e.name));
 
       update();
     }

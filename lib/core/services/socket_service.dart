@@ -13,7 +13,7 @@ class SocketService extends GetxService {
   Function(MessageModel messageData)? onDiscussionMessage;
   Future<SocketService> init() async {
     _socket = IO.io(
-      'http://${LOCAL_URL}:5000',
+      'http://$LOCAL_URL:5000',
       IO.OptionBuilder()
           .setTransports(['websocket'])
           .disableAutoConnect()
