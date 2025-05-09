@@ -34,6 +34,11 @@ class DiscussionController extends GetxController {
     update();
   }
 
+  void closeMoreActions() {
+    moreActions = false;
+    update();
+  }
+
   void handleIncomingMessage(MessageModel data) {
     messages.add(data);
     update(); // Trigger UI refresh
@@ -63,7 +68,6 @@ class DiscussionController extends GetxController {
         'message': inputController.text,
         'messageType': 'text'
       });
-      // print('send :${inputController.text}');
       inputController.clear();
       update();
     }

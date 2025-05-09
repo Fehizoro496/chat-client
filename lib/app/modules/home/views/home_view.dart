@@ -58,8 +58,8 @@ class HomeView extends StatelessWidget {
                   (discussion.lastMessage?.message ?? 'No messages yet');
 
               return Card(
-                elevation: 0,
-                color: Colors.grey[100],
+                elevation: 2,
+                color: Colors.grey[200],
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -88,7 +88,7 @@ class HomeView extends StatelessWidget {
                       ? Text(
                           formatGMTplus3(discussion.lastMessage!.createdAt),
                           style: const TextStyle(
-                            fontSize: 12,
+                            fontSize: 11,
                             color: Colors.black54,
                           ),
                         )

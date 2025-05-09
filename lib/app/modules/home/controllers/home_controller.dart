@@ -95,7 +95,6 @@ class HomeController extends GetxController {
 
   handleNewMessage(MessageModel messageData) {
     final chatRoomId = messageData.chatRoomId;
-    // final content = messageData.message;
 
     // Find the discussion and update lastMessage
     final index = discussions.indexWhere((d) => d.id == chatRoomId);

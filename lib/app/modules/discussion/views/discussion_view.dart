@@ -57,7 +57,14 @@ class DiscussionView extends GetView<DiscussionController> {
                           child: (controller.messages[index].isMine())
                               ? MyMessage(message: controller.messages[index])
                               : OtherMessage(
-                                  message: controller.messages[index]),
+                                  message: controller.messages[index],
+                                  showSender:
+                                      controller.discussion.isGroupChat &&
+                                          (index == 0 ||
+                                              !controller.messages[index]
+                                                  .hasSameSenderWith(controller
+                                                      .messages[index - 1])),
+                                ),
                         ),
                       ),
                     ),
@@ -139,6 +146,7 @@ class DiscussionView extends GetView<DiscussionController> {
                             controller: controller.inputController,
                             minLines: 1,
                             maxLines: 2,
+                            onTap: () => controller.closeMoreActions(),
                             decoration: InputDecoration(
                               contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 16, vertical: 12),

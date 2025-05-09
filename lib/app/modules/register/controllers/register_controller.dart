@@ -13,21 +13,6 @@ class RegisterController extends GetxController {
 
   AuthService authService = Get.find<AuthService>();
 
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  // }
-
-  // @override
-  // void onReady() {
-  //   super.onReady();
-  // }
-
-  // @override
-  // void onClose() {
-  //   super.onClose();
-  // }
-
   Future<bool> register() async {
     isLoading = true;
     update();
@@ -37,6 +22,15 @@ class RegisterController extends GetxController {
 
     isLoading = false;
     update();
+    if (success) {
+      Get.snackbar(
+        'Success',
+        'Registration successful',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+      );
+    }
     return success;
   }
 }
