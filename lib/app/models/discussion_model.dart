@@ -35,4 +35,8 @@ class Discussion {
       updatedAt: json['updatedAt'],
     );
   }
+
+  bool checked() {
+    return (lastMessage == null) ? false : lastMessage!.seen();
+  }
 }

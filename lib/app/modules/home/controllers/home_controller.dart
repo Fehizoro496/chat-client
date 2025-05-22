@@ -16,9 +16,9 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
-    super.onInit();
-    fetchDiscussions();
+    fetchDiscussions().then((e) => sortDiscussion());
     socketService.onDiscussionMessage = handleNewMessage;
+    super.onInit();
   }
 
   Future<String> fetchDiscussionName(Discussion discussion) async {
@@ -100,19 +100,22 @@ class HomeController extends GetxController {
     final index = discussions.indexWhere((d) => d.id == chatRoomId);
     if (index != -1) {
       discussions[index].lastMessage = messageData;
-      discussions.sort((a, b) {
-        if (a.lastMessage.isNull) {
-          return 1;
-        }
-        if (b.lastMessage.isNull) {
-          return -1;
-        }
-        return DateTime.parse(b.lastMessage!.createdAt)
-            .compareTo(DateTime.parse(a.lastMessage!.createdAt));
-      });
-      // print(discussions.map((e) => e.name));
-
-      update();
+      sortDiscussion();
     }
+  }
+
+  sortDiscussion() {
+    discussions.sort((a, b) {
+      if (a.lastMessage == null) {
+        return 1;
+      }
+      if (b.lastMessage == null) {
+        return -1;
+      }
+      return DateTime.parse(b.lastMessage!.createdAt)
+          .compareTo(DateTime.parse(a.lastMessage!.createdAt));
+    });
+    print(discussions.map((e) => e.name));
+    update();
   }
 }

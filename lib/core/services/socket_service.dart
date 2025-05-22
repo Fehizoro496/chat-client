@@ -2,6 +2,7 @@ import 'package:chat_app/app/models/message_model.dart';
 import 'package:chat_app/app/constant.dart';
 import 'package:chat_app/core/services/notification_service.dart';
 import 'package:get/get.dart';
+// ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketService extends GetxService {

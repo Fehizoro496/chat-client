@@ -59,7 +59,7 @@ class MessageModel {
     return message.senderId == senderId;
   }
 
-  bool seenByMe() {
+  bool seen() {
     return seenBy.contains(Get.find<AuthService>().userId);
   }
 }

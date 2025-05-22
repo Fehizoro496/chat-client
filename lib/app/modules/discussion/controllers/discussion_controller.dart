@@ -11,6 +11,7 @@ import 'package:chat_app/app/constant.dart';
 
 class DiscussionController extends GetxController {
   Discussion discussion = Get.arguments['discussion'];
+  final ScrollController scrollController = ScrollController();
   final AuthService authService = Get.find<AuthService>();
   final SocketService socketService = Get.find<SocketService>();
   final NotificationService notificationService =
@@ -27,6 +28,14 @@ class DiscussionController extends GetxController {
     socketService.onMessageReceived = handleIncomingMessage;
     isLoading = false;
     update();
+  }
+
+  void markAsSeen() {}
+
+  void scrollToBottom() {
+    if (scrollController.hasClients) {
+      scrollController.jumpTo(scrollController.position.maxScrollExtent);
+    }
   }
 
   void toogleMoreActions() {
@@ -70,6 +79,7 @@ class DiscussionController extends GetxController {
       });
       inputController.clear();
       update();
+      scrollToBottom();
     }
   }
 
