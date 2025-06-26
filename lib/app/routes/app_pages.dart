@@ -1,3 +1,4 @@
+import 'package:chat_app/core/services/auth_service.dart';
 import 'package:get/get.dart';
 
 import '../modules/discussion/bindings/discussion_binding.dart';
@@ -15,8 +16,6 @@ part 'app_routes.dart';
 
 class AppPages {
   AppPages._();
-
-  static const INITIAL = Routes.LOGIN;
 
   static final routes = [
     GetPage(
@@ -38,23 +37,6 @@ class AppPages {
       name: _Paths.REGISTER,
       page: () => const RegisterView(),
       binding: RegisterBinding(),
-      children: [
-        GetPage(
-          name: _Paths.REGISTER,
-          page: () => const RegisterView(),
-          binding: RegisterBinding(),
-        ),
-        GetPage(
-          name: _Paths.REGISTER,
-          page: () => const RegisterView(),
-          binding: RegisterBinding(),
-        ),
-        GetPage(
-          name: _Paths.REGISTER,
-          page: () => const RegisterView(),
-          binding: RegisterBinding(),
-        ),
-      ],
     ),
   ];
 }

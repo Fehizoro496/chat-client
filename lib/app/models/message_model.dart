@@ -59,7 +59,16 @@ class MessageModel {
     return message.senderId == senderId;
   }
 
+  bool isToday() {
+    return DateTime.now().difference(DateTime.parse(createdAt)).inDays == 0;
+  }
+
   bool seen() {
     return seenBy.contains(Get.find<AuthService>().userId);
+  }
+
+  void markAsSeen() {
+    final userId = Get.find<AuthService>().userId!;
+    if (!seenBy.contains(userId)) seenBy.add(userId);
   }
 }

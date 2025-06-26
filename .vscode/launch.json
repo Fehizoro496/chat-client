@@ -18,9 +18,9 @@
             "request": "launch",
             "type": "dart",
             "deviceId": "windows",
-            // "args": [
-            //     "--web-renderer=html"
-            // ]
+            "args": [
+                "--no-pub"
+            ]
         },
         {
             "name": "chat_app (debug on phone)",

@@ -26,9 +26,9 @@ class LoginController extends GetxController {
     return success;
   }
 
-  void initSocket() async {
-    await Get.putAsync(() => SocketService().init());
-  }
+  // void initSocket() async {
+  //   await Get.putAsync(() => SocketService().init());
+  // }
 }
 
   // @override

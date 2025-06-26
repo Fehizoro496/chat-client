@@ -1,4 +1,5 @@
 import 'package:chat_app/core/services/notification_service.dart';
+import 'package:chat_app/core/services/socket_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:window_manager/window_manager.dart'; // Add this import
@@ -28,11 +29,14 @@ void main() async {
 
   await Get.putAsync(() => AuthService().init());
   await Get.putAsync(() => NotificationService().init());
+  await Get.putAsync(() => SocketService().init());
+  final AuthService authService = Get.find<AuthService>();
+
   runApp(
     GetMaterialApp(
       title: "Application",
       debugShowCheckedModeBanner: false,
-      initialRoute: AppPages.INITIAL,
+      initialRoute: authService.checkAuth() ? Routes.HOME : Routes.LOGIN,
       getPages: AppPages.routes,
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),

@@ -15,7 +15,7 @@ class MyMessage extends StatelessWidget {
         Text(
           formatGMTplus3(message.updatedAt),
           style:
-              const TextStyle(fontSize: 11.0, color: Colors.black54), // Updated
+              const TextStyle(fontSize: 10, color: Colors.black54), // Updated
         ),
         const SizedBox(
           width: 6.0,
@@ -24,7 +24,7 @@ class MyMessage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: Colors.black87, // Updated to match login_view.dart
+            color: Colors.blue, // Updated to match login_view.dart
           ),
           child: Text(
             message.message,

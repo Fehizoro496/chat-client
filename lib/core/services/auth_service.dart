@@ -3,13 +3,29 @@ import 'package:chat_app/app/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService extends GetxService {
   String? token;
   String? userId;
   String? userName;
+  SharedPreferences? _prefs;
 
-  Future<AuthService> init() async => this;
+  Future<AuthService> init() async {
+    _prefs = await SharedPreferences.getInstance();
+    token = _prefs!.getString('token');
+    userId = _prefs!.getString('userId');
+    userName = _prefs!.getString('userName');
+    return this;
+  }
+
+  bool _isValid(String? input) {
+    return (input != null && input != '');
+  }
+
+  bool checkAuth() {
+    return (_isValid(token) && _isValid(userId) && _isValid(userName));
+  }
 
   Future<bool> register(String username, String email, String password) async {
     final response = await http.post(
@@ -48,10 +64,14 @@ class AuthService extends GetxService {
     );
 
     if (response.statusCode == 200) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       final data = jsonDecode(response.body);
       token = data['token'];
       userId = data['user']['_id'];
       userName = data['user']['username'];
+      if (token != null) prefs.setString('token', token!);
+      if (userId != null) prefs.setString('userId', userId!);
+      if (userName != null) prefs.setString('userName', userName!);
       return true;
     } else if (response.statusCode == 404) {
       Get.snackbar(
@@ -84,5 +104,6 @@ class AuthService extends GetxService {
     token = null;
     userId = null;
     userName = null;
+    _prefs!.clear();
   }
 }

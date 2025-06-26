@@ -6,3 +6,7 @@ String formatGMTplus3(String utcDateString) {
   // return DateFormat('yyyy-MM-dd HH:mm').format(utcPlus3Date);
   return DateFormat('HH:mm').format(utcPlus3Date);
 }
+
+String formatDate(String date) {
+  return date.split('T')[0].split('-').reversed.join('/');
+}

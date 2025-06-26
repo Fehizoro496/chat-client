@@ -21,22 +21,23 @@ class LoginView extends GetView<LoginController> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.person_outline,
-                        size: 60, color: Colors.black87),
-                    const SizedBox(height: 32),
-                    const Text(
-                      'Welcome',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w300,
-                        letterSpacing: 1.5,
-                      ),
-                    ),
+                    Image.asset('assets/logo_metm.png'),
+                    // const Icon(Icons.person_outline,
+                    //     size: 60, color: Colors.black87),
+                    // const SizedBox(height: 32),
+                    // const Text(
+                    //   'Welcome',
+                    //   style: TextStyle(
+                    //     fontSize: 28,
+                    //     fontWeight: FontWeight.w300,
+                    //     letterSpacing: 1.5,
+                    //   ),
+                    // ),
                     const SizedBox(height: 48),
                     TextField(
                       controller: controller.usernameCtrl,
                       decoration: InputDecoration(
-                        labelText: 'Username',
+                        labelText: 'Pseudo',
                         prefixIcon:
                             const Icon(Icons.person, color: Colors.black54),
                         border: OutlineInputBorder(
@@ -52,7 +53,7 @@ class LoginView extends GetView<LoginController> {
                       controller: controller.passwordCtrl,
                       obscureText: controller.hidePassword,
                       decoration: InputDecoration(
-                        labelText: 'Password',
+                        labelText: 'Mot de passe',
                         prefixIcon:
                             const Icon(Icons.lock, color: Colors.black54),
                         border: OutlineInputBorder(
@@ -80,7 +81,7 @@ class LoginView extends GetView<LoginController> {
                           ? const Center(child: CircularProgressIndicator())
                           : ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.black87,
+                                backgroundColor: Theme.of(context).primaryColor,
                                 foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
@@ -94,11 +95,11 @@ class LoginView extends GetView<LoginController> {
                                 );
                                 if (success) {
                                   Get.offAllNamed('/home');
-                                  controller.initSocket();
+                                  // controller.initSocket();
                                 }
                               },
                               child: const Text(
-                                'Sign In',
+                                'Se connecter',
                                 style: TextStyle(
                                   fontSize: 16,
                                   letterSpacing: 1.2,

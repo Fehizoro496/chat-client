@@ -27,10 +27,39 @@ class DiscussionController extends GetxController {
     await fetchMessages();
     socketService.onMessageReceived = handleIncomingMessage;
     isLoading = false;
+    markAsSeen();
+    print(discussion.lastMessage?.toJson());
     update();
   }
 
-  void markAsSeen() {}
+  @override
+  void onClose() {
+    markAsSeen();
+    print(discussion.lastMessage!.toJson());
+    super.onClose();
+  }
+
+  void disposeScrollController() {
+    if (scrollController.hasClients) {
+      scrollController.dispose();
+      // scrollController.detach(scrollController.position);
+    }
+    print('scroll controller disposed');
+  }
+
+  void markAsSeen() async {
+    if (!discussion.lastMessage!.seen()) {
+      final response = await http.put(
+        Uri.parse(
+            "http://$LOCAL_URL:5000/api/chats/seen/${discussion.lastMessage!.id}"),
+        headers: {
+          'Authorization': 'Bearer ${authService.token}',
+        },
+      );
+      print(response.body);
+      if (response.statusCode == 200) discussion.lastMessage!.markAsSeen();
+    }
+  }
 
   void scrollToBottom() {
     if (scrollController.hasClients) {
@@ -38,9 +67,57 @@ class DiscussionController extends GetxController {
     }
   }
 
+  // void toogleMoreActions() {
+  //   moreActions = !moreActions;
+  //   update();
+  // }
+
   void toogleMoreActions() {
-    moreActions = !moreActions;
-    update();
+    Get.bottomSheet(BottomSheet(
+        // enableDrag: true,
+        onClosing: () {},
+        builder: (context) {
+          return SizedBox(
+            height: kToolbarHeight * 2 + 10,
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 10.0),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                    color: Colors.black12.withOpacity(.30),
+                  ),
+                  width: 70,
+                  height: 5,
+                ),
+                const ListTile(
+                  leading: CircleAvatar(
+                    child: Icon(
+                      Icons.image_outlined,
+                      size: 18,
+                    ),
+                  ),
+                  title: Text(
+                    'Send an image',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                ),
+                const ListTile(
+                  leading: CircleAvatar(
+                    child: Icon(
+                      Icons.attach_file,
+                      size: 18,
+                    ),
+                  ),
+                  title: Text(
+                    'Send a file',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }));
   }
 
   void closeMoreActions() {
@@ -75,6 +152,7 @@ class DiscussionController extends GetxController {
         'chatRoomId': discussion.id,
         'senderId': authService.userId,
         'message': inputController.text,
+        'seenBy': [authService.userId],
         'messageType': 'text'
       });
       inputController.clear();
