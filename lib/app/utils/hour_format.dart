@@ -8,5 +8,7 @@ String formatGMTplus3(String utcDateString) {
 }
 
 String formatDate(String date) {
-  return date.split('T')[0].split('-').reversed.join('/');
+  final utcDate = DateTime.parse(date).toUtc();
+  final utcPlus3Date = utcDate.add(const Duration(hours: 3));
+  return DateFormat('dd/MM/yyyy').format(utcPlus3Date);
 }
