@@ -5,6 +5,7 @@ class MessageModel {
   final String id;
   final String chatRoomId;
   final String senderId;
+  final String senderName;
   String message;
   final String messageType; // 'text', 'image', 'file'
   List<String> seenBy;
@@ -16,6 +17,7 @@ class MessageModel {
     required this.id,
     required this.chatRoomId,
     required this.senderId,
+    required this.senderName,
     required this.message,
     required this.messageType,
     required this.seenBy,
@@ -32,6 +34,7 @@ class MessageModel {
       senderId: json['senderId'] is String
           ? json['senderId']
           : json['senderId']['_id'],
+      senderName: json['senderName'],
       message: json['message'],
       messageType: json['messageType'] ?? 'text',
       seenBy: List<String>.from(
@@ -45,6 +48,7 @@ class MessageModel {
     return {
       'chatRoomId': chatRoomId,
       'senderId': senderId,
+      'senderName': senderName,
       'message': message,
       'messageType': messageType,
       'seenBy': seenBy,

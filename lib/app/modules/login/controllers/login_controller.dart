@@ -1,5 +1,4 @@
 import 'package:chat_app/core/services/auth_service.dart';
-import 'package:chat_app/core/services/socket_service.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 

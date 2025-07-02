@@ -76,15 +76,17 @@ class LoginView extends GetView<LoginController> {
                     const SizedBox(height: 32),
                     SizedBox(
                       width: double.infinity,
-                      height: 50,
+                      // height: 50,
                       child: controller.isLoading
                           ? const Center(child: CircularProgressIndicator())
                           : ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Theme.of(context).primaryColor,
                                 foregroundColor: Colors.white,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 15),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                                 elevation: 0,
                               ),
@@ -106,6 +108,29 @@ class LoginView extends GetView<LoginController> {
                                 ),
                               ),
                             ),
+                    ),
+                    const SizedBox(height: 10), // Add spacing between buttons
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextButton(
+                        onPressed: () {
+                          Get.toNamed('/register');
+                        },
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: const Text(
+                          "S'inscrire",
+                          style: TextStyle(
+                            fontSize: 16,
+                            letterSpacing: 1.2,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),

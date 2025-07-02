@@ -55,19 +55,33 @@ class OtherMessage extends StatelessWidget {
         Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.grey[100], // Updated to match login_view.dart
-              ),
-              child: Text(
-                message.message,
-                style: const TextStyle(
-                  color: Colors.black87, // Updated to match login_view.dart
-                ),
-              ),
-            ),
+            (message.messageType == 'text')
+                ? Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color:
+                          Colors.grey[100], // Updated to match login_view.dart
+                    ),
+                    child: Text(
+                      message.message,
+                      style: const TextStyle(
+                        color:
+                            Colors.black87, // Updated to match login_view.dart
+                      ),
+                    ),
+                  )
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.network(
+                      filterQuality: FilterQuality.medium,
+                      'http://$LOCAL_URL:5000${message.message}',
+                      // height: 100,
+                      width: 150,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
             const SizedBox(
               width: 6.0,
             ),

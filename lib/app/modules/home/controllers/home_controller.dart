@@ -15,8 +15,8 @@ class HomeController extends GetxController {
   bool isLoading = false;
 
   @override
-  void onInit() {
-    fetchDiscussions().then((e) => sortDiscussion());
+  void onInit() async {
+    await fetchDiscussions();
     socketService.onDiscussionMessage = handleNewMessage;
     super.onInit();
   }
@@ -67,6 +67,37 @@ class HomeController extends GetxController {
 
     final token = authService.token;
 
+    http.get(
+      Uri.parse("http://$LOCAL_URL:5000/api/chats/rooms"),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    ).then((response) async {
+      final List data = jsonDecode(response.body);
+      // print(data);
+      discussions = data.map((e) {
+        return Discussion.fromJson(e);
+      }).toList();
+      discussions = await Future.wait(discussions.map((e) async {
+        e.name = await fetchDiscussionName(e);
+        return e;
+      }));
+      for (var e in discussions) {
+        socketService.joinRoom(e.id);
+      }
+      _sortDiscussion();
+      update();
+    }).catchError((onError) {});
+
+    isLoading = false;
+  }
+
+  Future<void> fetchDiscussions2() async {
+    isLoading = true;
+    update();
+
+    final token = authService.token;
+
     final response = await http.get(
       Uri.parse("http://$LOCAL_URL:5000/api/chats/rooms"),
       headers: {
@@ -100,11 +131,11 @@ class HomeController extends GetxController {
     final index = discussions.indexWhere((d) => d.id == chatRoomId);
     if (index != -1) {
       discussions[index].lastMessage = messageData;
-      sortDiscussion();
+      _sortDiscussion();
     }
   }
 
-  sortDiscussion() {
+  Future<void> _sortDiscussion() async {
     discussions.sort((a, b) {
       if (a.lastMessage == null) {
         return 1;
@@ -115,7 +146,16 @@ class HomeController extends GetxController {
       return DateTime.parse(b.lastMessage!.createdAt)
           .compareTo(DateTime.parse(a.lastMessage!.createdAt));
     });
+    print('sort');
     print(discussions.map((e) => e.name));
     update();
+  }
+
+  void logout() {
+    Get.offAllNamed('/login');
+    for (var e in discussions) {
+      socketService.leaveRoom(e.id);
+    }
+    authService.logout();
   }
 }

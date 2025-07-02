@@ -1,4 +1,3 @@
-import 'package:chat_app/core/services/auth_service.dart';
 import 'package:get/get.dart';
 
 import '../modules/discussion/bindings/discussion_binding.dart';

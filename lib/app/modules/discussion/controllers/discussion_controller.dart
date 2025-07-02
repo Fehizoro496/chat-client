@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:chat_app/app/models/discussion_model.dart';
 import 'package:chat_app/core/services/notification_service.dart';
 import 'package:http/http.dart' as http;
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:chat_app/app/models/message_model.dart';
 import 'package:chat_app/app/constant.dart';
+import 'package:image_picker/image_picker.dart';
 
 class DiscussionController extends GetxController {
   Discussion discussion = Get.arguments['discussion'];
@@ -20,6 +22,8 @@ class DiscussionController extends GetxController {
   TextEditingController inputController = TextEditingController();
   bool isLoading = true;
   bool moreActions = false;
+  XFile? pickedImage;
+  String? selectedImage;
 
   @override
   void onInit() async {
@@ -28,27 +32,33 @@ class DiscussionController extends GetxController {
     socketService.onMessageReceived = handleIncomingMessage;
     isLoading = false;
     markAsSeen();
-    print(discussion.lastMessage?.toJson());
     update();
   }
 
   @override
   void onClose() {
     markAsSeen();
-    print(discussion.lastMessage!.toJson());
     super.onClose();
+  }
+
+  void showImage(String image) {
+    selectedImage = image;
+    update();
+  }
+
+  void hideImage() {
+    selectedImage = null;
+    update();
   }
 
   void disposeScrollController() {
     if (scrollController.hasClients) {
       scrollController.dispose();
-      // scrollController.detach(scrollController.position);
     }
-    print('scroll controller disposed');
   }
 
   void markAsSeen() async {
-    if (!discussion.lastMessage!.seen()) {
+    if (discussion.lastMessage != null && (!discussion.lastMessage!.seen())) {
       final response = await http.put(
         Uri.parse(
             "http://$LOCAL_URL:5000/api/chats/seen/${discussion.lastMessage!.id}"),
@@ -71,6 +81,10 @@ class DiscussionController extends GetxController {
   //   moreActions = !moreActions;
   //   update();
   // }
+  void removeImage() {
+    pickedImage = null;
+    update();
+  }
 
   void toogleMoreActions() {
     Get.bottomSheet(BottomSheet(
@@ -90,14 +104,18 @@ class DiscussionController extends GetxController {
                   width: 70,
                   height: 5,
                 ),
-                const ListTile(
-                  leading: CircleAvatar(
+                ListTile(
+                  onTap: () {
+                    handleImagePicker();
+                    Get.back();
+                  },
+                  leading: const CircleAvatar(
                     child: Icon(
                       Icons.image_outlined,
                       size: 18,
                     ),
                   ),
-                  title: Text(
+                  title: const Text(
                     'Send an image',
                     style: TextStyle(fontWeight: FontWeight.w500),
                   ),
@@ -146,11 +164,39 @@ class DiscussionController extends GetxController {
     }
   }
 
+  Future<void> handleImagePicker() async {
+    final ImagePicker picker = ImagePicker();
+    pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    update();
+  }
+
   void sendMessage() {
-    if (inputController.text.trim().isNotEmpty) {
+    if (pickedImage != null) {
+      uploadImage(File(pickedImage!.path)).then((imageUrl) {
+        if (imageUrl != null) {
+          socketService.sendMessage({
+            'chatRoomId': discussion.id,
+            'senderId': authService.userId,
+            'senderName': authService.userName,
+            'message': imageUrl,
+            'seenBy': [authService.userId],
+            'messageType': 'image'
+          });
+          pickedImage = null; // Reset the picked image
+          update();
+          scrollToBottom();
+        } else {
+          print("Failed to upload image");
+        }
+        pickedImage = null;
+        update();
+        scrollToBottom();
+      });
+    } else if (inputController.text.trim().isNotEmpty) {
       socketService.sendMessage({
         'chatRoomId': discussion.id,
         'senderId': authService.userId,
+        'senderName': authService.userName,
         'message': inputController.text,
         'seenBy': [authService.userId],
         'messageType': 'text'
@@ -158,6 +204,27 @@ class DiscussionController extends GetxController {
       inputController.clear();
       update();
       scrollToBottom();
+    }
+  }
+
+  Future<String?> uploadImage(File imageFile) async {
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('http://$LOCAL_URL:5000/upload'),
+    );
+
+    request.files
+        .add(await http.MultipartFile.fromPath('image', imageFile.path));
+
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      final body = await http.Response.fromStream(response);
+      final data = jsonDecode(body.body);
+      return data["imageUrl"];
+    } else {
+      print("Erreur d'upload");
+      return null;
     }
   }
 
